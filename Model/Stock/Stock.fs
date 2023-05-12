@@ -10,6 +10,13 @@ open Bin
 /// other properties. This means that individual products do not have an "identity". Indeed, current software of the
 /// Storage Machine does not (yet?) support serial numbers for products.
 type Product = Product of PartNumber
+let (|ProductPartNumber|) (product: Product) =
+    let party = match product with
+                | Product(p) -> p
+
+    match party with
+    | PartNumber(pn) -> pn
+//let (|ProductPartNumber|) (Product product) = let (PartNumber partNumber) = product in partNumber
 
 /// All products in the Storage Machine are counted by piece.
 type Quantity = int
