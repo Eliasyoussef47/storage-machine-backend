@@ -38,3 +38,6 @@ module PartNumber =
         rawPartNumber
         |> Validation.matches validPartNumber "Part number must have format dddd-dddd-dddd, where d is a digit."
         |> Result.map PartNumber
+
+    let rawValue (PartNumber(n)) = n
+

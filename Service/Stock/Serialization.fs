@@ -36,7 +36,9 @@ let decoderPartNumber : Decoder<PartNumber> =
 
 /// JSON serialization of a stock product.
 let encoderProduct : Encoder<Product> = fun product ->
-    failwith "Exercise 0: choose your own serialized representation of a Product and implement it here."
+    Encode.object [
+        "partNumber", (let (Product partNumber) = product in Encode.string (PartNumber.rawValue partNumber))
+    ]
 
 /// JSON serialization of a complete products overview.
 let encoderProductsOverview : Encoder<ProductsOverview> = fun productsOverview ->

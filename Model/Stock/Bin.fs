@@ -11,10 +11,15 @@ type Bin = {
 }
 
 /// Indicates whether the given bin is empty.
-let isEmpty bin =
+let isEmpty (bin: Bin) =
     match bin with
     | { Content = None } -> true
     | _ -> false
 
 /// Indicates whether the given bin is not empty, i.e. actually contains a product.
 let isNotEmpty = not << isEmpty
+
+let isNotEmptyOption (bin: Bin) =
+    if isNotEmpty bin then
+        bin.Content
+    else None
