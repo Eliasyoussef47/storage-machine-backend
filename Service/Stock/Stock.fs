@@ -30,10 +30,27 @@ let productsInStock (next: HttpFunc) (ctx: HttpContext) =
         return! ThothSerializer.RespondJson productsOverview Serialization.encoderProductsOverview next ctx 
     }
 
+let insertBin (next: HttpFunc) (ctx: HttpContext) =
+    task {
+        let! inputBinBody = ThothSerializer.ReadBody ctx Serialization.decoderBin
+        match inputBinBody with
+        | Error e -> return! RequestErrors.badRequest (text e) earlyReturn ctx
+        | Ok inputBin ->
+            let dataAccess = ctx.GetService<IStockDataAccess> ()
+            let newBinResult = Stock.addBin dataAccess inputBin.Identifier inputBin.Content
+            match newBinResult with
+            | Error addError ->
+                match addError with
+                | BinAlreadyStored -> return! RequestErrors.badRequest (text "Bin already exists.") earlyReturn ctx
+            | Ok newBin -> return! ThothSerializer.RespondJson newBin Serialization.encoderBin next ctx 
+            
+    }
+
 /// Defines URLs for functionality of the Stock component and dispatches HTTP requests to those URLs.
 let handlers : HttpHandler =
     choose [
         GET >=> route "/bins" >=> binOverview
+        POST >=> route "/bins" >=> insertBin
         GET >=> route "/stock" >=> stockOverview
         GET >=> route "/stock/products" >=> productsInStock
     ]

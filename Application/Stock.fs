@@ -4,13 +4,18 @@ module StorageMachine.Stock.Stock
 open StorageMachine
 open Bin
 open StorageMachine.Repacking.BinTree
+open Common
 open Stock
+
+type StorageMachineError =
+    | BinAlreadyStored
 
 /// Defines data access operations for stock functionality.
 type IStockDataAccess =
 
     /// Retrieve all bins currently stored in the Storage Machine.
     abstract RetrieveAllBins : unit -> List<Bin>
+    abstract CreateBin: BinIdentifier -> Option<PartNumber> -> Result<Bin, StorageMachineError>
 
 /// An overview of all bins currently stored in the Storage Machine.
 let binOverview (dataAccess : IStockDataAccess) : List<Bin> =
@@ -37,3 +42,6 @@ let productsInStock (stockDataAccess : IStockDataAccess) : ProductsOverview =
     |> totalQuantity
     |> Map.toSeq
     |> Set.ofSeq
+
+let addBin (stockDataAccess : IStockDataAccess) (binId: BinIdentifier) (part: Option<PartNumber>): Result<Bin, StorageMachineError> =
+    stockDataAccess.CreateBin binId part
