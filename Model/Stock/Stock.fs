@@ -17,10 +17,10 @@ type Quantity = int
 /// All products in the given bins.
 let allProducts (bins: seq<Bin>) : List<Product> =
     bins
-    |> Seq.choose isNotEmptyOption 
+    |> Seq.distinctBy (fun x -> x.Identifier)
+    |> Seq.choose (fun x -> x.Content)
     |> Seq.map Product
     |> Seq.toList
-// TODO: Exercise 0: what if a bin occurs multiple times in the input?
 
 /// Total quantity of each of the provided products.
 let totalQuantity (products: seq<Product>) : Map<Product, Quantity> =

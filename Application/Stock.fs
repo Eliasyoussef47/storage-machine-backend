@@ -34,7 +34,6 @@ let productsInStock (stockDataAccess : IStockDataAccess) : ProductsOverview =
     // Use the model
     let products = Stock.allProducts <| stockDataAccess.RetrieveAllBins()
     products
-    |> Seq.ofList
     |> totalQuantity
-    |> Map.toList
-    |> Set.ofList
+    |> Map.toSeq
+    |> Set.ofSeq
