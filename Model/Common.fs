@@ -41,3 +41,7 @@ module PartNumber =
 
     let rawValue (PartNumber(n)) = n
 
+    let (|PartNumber|) partNumber =
+        match partNumber with
+        | PartNumber(partNumber) -> partNumber
+
