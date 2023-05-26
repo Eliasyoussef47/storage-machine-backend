@@ -43,8 +43,13 @@ let decoderBin : Decoder<Bin> =
     )
 
 /// JSON serialization of a stock product.
-// VRAAG: hoe werkt dit?
 let encoderProduct : Encoder<Product> = fun product ->
+    //let (Product partNumber) = product
+    //let (PartNumber numberStr) = partNumber
+
+    //let (ProductPartNumber partNumber) = product
+    //let jsonValue = Encode.string partNumber
+
     Encode.object [
         "partNumber", (let (ProductPartNumber partNumber) = product in Encode.string partNumber)
         // "partNumber", (let (Product partNumber) = product in Encode.string (PartNumber.rawValue partNumber))
